@@ -1,9 +1,10 @@
 package Model;
 
 import Exceptions.ElementoEsistenteException;
-import Exceptions.ElementoNonTrovatoException
+import Exceptions.ElementoNonTrovatoException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Archivio {
     private List<Consultabile> elementi;
@@ -47,7 +48,30 @@ public class Archivio {
                 .map(e->(Libri) e)
                 .filter(libro -> libro.getAutore().equalsIgnoreCase(autore)).toList();
 
+
     }
+
+    public void aggiornaElemento(Consultabile input) throws ElementoNonTrovatoException {
+        // Trovo l'elemento tramite ISBN
+        Consultabile consultabile = elementi.stream()
+                .filter(e -> e.getIsbn().equals(input.getIsbn()))
+                .findFirst()
+                .orElseThrow(() -> new ElementoNonTrovatoException("Elemento con ISBN " + input.getIsbn() + " non trovato."));
+
+        // Aggiorno l'elemento con i valori di input
+        consultabile.setAnno(input.getAnno());
+        consultabile.setIsbn(input.getIsbn());
+        consultabile.setPagine(input.getPagine());
+        consultabile.setTitolo(input.getTitolo());
+    }
+
+    public void statistiche (){
+        long numeroLibri= elementi.stream().filter(e->e instanceof Libri).count();
+
+        long numeroRiviste= elementi.stream().filter(e->e instanceof Riviste).count();
+
+    }
+
 
 }
 
