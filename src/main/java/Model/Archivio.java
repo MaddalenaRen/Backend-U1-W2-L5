@@ -42,8 +42,11 @@ public class Archivio {
         return elementi.stream().filter(e->e.getAnno()==anno).toList();
     }
 
-    public List<Consultabile> ricercaPerAutore (String autore) {
-        return elementi.stream().filter(e->e.)
+    public List<Libri> ricercaPerAutore (String autore) {
+        return elementi.stream().filter(e->e instanceof Libri)
+                .map(e->(Libri) e)
+                .filter(libro -> libro.getAutore().equalsIgnoreCase(autore)).toList();
+
     }
 
 }
