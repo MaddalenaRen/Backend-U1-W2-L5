@@ -67,8 +67,27 @@ public class Archivio {
 
     public void statistiche (){
         long numeroLibri= elementi.stream().filter(e->e instanceof Libri).count();
-
         long numeroRiviste= elementi.stream().filter(e->e instanceof Riviste).count();
+
+        Consultabile maxPagine = elementi.stream()
+                .max((e1, e2) -> Integer.compare(e1.getPagine(), e2.getPagine()))
+                .orElse(null);
+
+        double mediaPagine = elementi.stream()
+                .mapToInt(Consultabile::getPagine)
+                .average()
+                .orElse(0.0);
+
+        System.out.println("Numero totale di libri: " + numeroLibri);
+        System.out.println("Numero totale di riviste: " + numeroRiviste);
+
+        if (maxPagine != null) {
+            System.out.println("Elemento con più pagine: " + maxPagine.getTitolo() + " (" + maxPagine.getPagine() + " pagine)");
+        } else {
+            System.out.println("Nessun elemento trovato.");
+        }
+
+        System.out.println("Media pagine: " + mediaPagine);
 
     }
 
