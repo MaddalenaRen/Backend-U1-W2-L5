@@ -39,7 +39,7 @@ public class Archivio {
         return elementi.removeIf(elementi -> elementi.getIsbn().equals(isbn));
     }
 
-    public List<Consultabile> ricercaPerAnno (int anno){
+    public List<Consultabile> ricercaPerAnno (Integer anno){
         return elementi.stream().filter(e->e.getAnno()==anno).toList();
     }
 
@@ -51,18 +51,24 @@ public class Archivio {
 
     }
 
-    public void aggiornaElemento(Consultabile input) throws ElementoNonTrovatoException {
+    public void aggiornaElemento(Consultabile input) {
         // Trovo l'elemento tramite ISBN
-        Consultabile consultabile = elementi.stream()
-                .filter(e -> e.getIsbn().equals(input.getIsbn()))
-                .findFirst()
-                .orElseThrow(() -> new ElementoNonTrovatoException("Elemento con ISBN " + input.getIsbn() + " non trovato."));
 
-        // Aggiorno l'elemento con i valori di input
-        consultabile.setAnno(input.getAnno());
-        consultabile.setIsbn(input.getIsbn());
-        consultabile.setPagine(input.getPagine());
-        consultabile.setTitolo(input.getTitolo());
+        try{
+            Consultabile consultabile = elementi.stream()
+                    .filter(e -> e.getIsbn().equals(input.getIsbn()))
+                    .findFirst()
+                    .orElseThrow(() -> new ElementoNonTrovatoException("Elemento con ISBN " + input.getIsbn() + " non trovato."));
+
+            // Aggiorno l'elemento con i valori di input
+            consultabile.setAnno(input.getAnno());
+            consultabile.setIsbn(input.getIsbn());
+            consultabile.setPagine(input.getPagine());
+            consultabile.setTitolo(input.getTitolo());
+
+        } catch (ElementoNonTrovatoException e) {
+            System.out.println("Aggiorna elemento in errore: elemento non trovato");
+        }
     }
 
     public void statistiche (){
